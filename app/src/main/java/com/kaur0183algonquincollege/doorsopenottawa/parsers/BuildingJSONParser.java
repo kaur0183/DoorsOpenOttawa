@@ -14,7 +14,8 @@ import java.util.List;
 
 /**
  * In this class the JSON data of building is parsing
- *  @author Prabhjot kaur (kaur0183@algonquinlive.com)
+ *
+ * @author Prabhjot kaur (kaur0183@algonquinlive.com)
  */
 public class BuildingJSONParser {
 
@@ -35,7 +36,15 @@ public class BuildingJSONParser {
                 building.setImage(obj.getString("image"));
                 building.setAddress(obj.getString("address"));
                 building.setDescription(obj.getString("description"));
-                building.setOpenhours(obj.getString("open_hours"));
+                List<String> temp = new ArrayList<>();
+                JSONArray jsonArray = obj.getJSONArray("open_hours");
+                if (jsonArray.length() != 0) {
+                    for (int j = 0; j < jsonArray.length(); j++) {
+                        JSONObject json = (JSONObject) jsonArray.get(j);
+                        temp.add(json.getString("date"));
+                    }
+                }
+                building.setOpenhours(temp);
                 buildingList.add(building);
             }
 

@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,14 +21,16 @@ import com.kaur0183algonquincollege.doorsopenottawa.model.Building;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- *  In this class we are displaying the name , address and showing the image
- *  @author Prabhjot kaur (kaur0183@algonquinlive.com)
+ * In this class we are displaying the name , address and showing the image
+ *
+ * @author Prabhjot kaur (kaur0183@algonquinlive.com)
  */
 
-public class BuildingAdapter extends ArrayAdapter<Building> {
+public class BuildingAdapter extends ArrayAdapter<Building> implements Filterable {
     private Context context;
     private List<Building> buildingList;
 
@@ -36,10 +40,14 @@ public class BuildingAdapter extends ArrayAdapter<Building> {
         super(context, resource, objects);
         this.context = context;
         this.buildingList = objects;
-
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
         final int cacheSize = maxMemory / 8;
         imageCache = new LruCache<>(cacheSize);
+    }
+
+    @Override
+    public int getCount() {
+        return buildingList.size();
     }
 
     @Override
@@ -77,6 +85,43 @@ public class BuildingAdapter extends ArrayAdapter<Building> {
 
     }
 
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                FilterResults filterResults = new FilterResults();
+                if (constraint != null && constraint.length() > 0) {
+                    ArrayList<Building> tempList = new ArrayList<Building>();
+
+                    // search content in friend list
+                    for (Building user : buildingList) {
+                        if (user.getName().toLowerCase().startsWith(constraint.toString().toLowerCase().toString().toLowerCase())) {
+                            tempList.add(user);
+                        }
+                    }
+
+                    filterResults.count = tempList.size();
+                    filterResults.values = tempList;
+                } else {
+                    filterResults.count = buildingList.size();
+                    filterResults.values = buildingList;
+                }
+
+                return filterResults;
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                buildingList = (ArrayList<Building>) results.values;
+                notifyDataSetChanged();
+
+            }
+        };
+    }
+
+
     private class BuildingAndView {
         public Building building;
         public View view;
@@ -110,10 +155,14 @@ public class BuildingAdapter extends ArrayAdapter<Building> {
 
         @Override
         protected void onPostExecute(BuildingAndView result) {
-            ImageView image = (ImageView) result.view.findViewById(R.id.imageView1);
-            image.setImageBitmap(result.bitmap);
+            try {
+                ImageView image = (ImageView) result.view.findViewById(R.id.imageView1);
+                image.setImageBitmap(result.bitmap);
 //            result.building.setBitmap(result.bitmap);
-            imageCache.put(result.building.getBuildingID(), result.bitmap);
+                imageCache.put(result.building.getBuildingID(), result.bitmap);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

@@ -8,8 +8,9 @@ import android.os.Bundle;
 
 
 /**
- *  creating the about dialod and setting our information about the author
- *  @author Prabhjot kaur (kaur0183@algonquinlive.com)
+ * creating the about dialog and setting our information about the author
+ *
+ * @author Prabhjot kaur (kaur0183@algonquinlive.com)
  */
 
 public class AboutDialogFragment extends DialogFragment {

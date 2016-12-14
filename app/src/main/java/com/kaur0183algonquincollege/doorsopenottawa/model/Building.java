@@ -2,9 +2,12 @@ package com.kaur0183algonquincollege.doorsopenottawa.model;
 
 import android.graphics.Bitmap;
 
+import java.util.List;
+
 /**
  * This Class is used for setting and getting the buildingID, address, image, description and open hours
- *  @author Prabhjot kaur (kaur0183@algonquinlive.com)
+ *
+ * @author Prabhjot kaur (kaur0183@algonquinlive.com)
  */
 
 public class Building {
@@ -13,7 +16,7 @@ public class Building {
     private String address;
     private String image;
     private String description;
-    private String openhours;
+    private List<String> openhours;
     private Bitmap bitmap;
 
     public void setBuildingID(int buildingID) {
@@ -56,13 +59,20 @@ public class Building {
         return description;
     }
 
-    public String getOpenhours() { return openhours; }
+    public List<String> getOpenhours() {
+        return openhours;
+    }
 
-    public void setOpenhours(String openhours) {this.openhours = openhours;}
+    public void setOpenhours(List<String> openhours) {
+        this.openhours = openhours;
+    }
 
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
 
-    public Bitmap getBitmap() { return bitmap; }
-
-    public void setBitmap(Bitmap bitmap) { this.bitmap = bitmap; }
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
 }
 
